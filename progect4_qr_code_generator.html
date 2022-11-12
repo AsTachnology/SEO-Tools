@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<!-- Created By AsTachnology - astachnology.com -->
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <title>Auto writing</title>
+  <style>
+
+    body {
+      display: flex;
+      padding: 0 10px;
+      align-items: center;
+      justify-content: center;
+      background: blueviolet;
+    }
+
+    .box {
+      height: 265px;
+      max-width: 410px;
+      background: #fff;
+      border-radius: 7px;
+      padding: 20px 25px 0;
+      transition: height 0.2s ease;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    }
+
+    .box.active {
+      height: 530px;
+    }
+
+    header h1 {
+      font-size: 21px;
+      font-weight: 500;
+    }
+
+    header p {
+      margin-top: 5px;
+      color: #575757;
+      font-size: 16px;
+    }
+
+    .form :where(input, button) {
+      width: 100%;
+      height: 50px;
+      border: none;
+      outline: none;
+      border-radius: 5px;
+      transition: 0.1s ease;
+    }
+
+    .form input {
+      font-size: 18px;
+      padding: 5px;
+      border: 1px solid #999;
+    }
+
+    .form button {
+      color: #fff;
+      cursor: pointer;
+      margin-top: 20px;
+      font-size: 17px;
+      background: #3498DB;
+    }
+
+    .qr-code {
+      opacity: 0;
+      display: flex;
+      padding: 33px 0;
+      border-radius: 5px;
+      align-items: center;
+      justify-content: center;
+      border: 1px solid #ccc;
+    }
+
+    .box.active .qr-code {
+      opacity: 1;
+      transition: opacity 0.5s 0.05s ease;
+    }
+
+    .qr-code img {
+      width: 170px;
+    }
+
+    @media (max-width: 430px) {
+      .box {
+        height: 255px;
+        padding: 16px 20px;
+      }
+
+      .box.active {
+        height: 510px;
+      }
+
+      header p {
+        color: #696969;
+      }
+
+      .form :where(input, button) {
+        height: 52px;
+      }
+
+      .qr-code img {
+        width: 160px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="box">
+    <header>
+      <h1>QR Code Generator</h1>
+      <p>Paste a url or enter text to create QR code</p>
+    </header>
+    <div class="form">
+      <input type="text" spellcheck="false" placeholder="Enter text or url">
+      <button>Generate QR Code</button>
+    </div>
+    <div class="qr-code">
+      <img src="" alt="qr-code">
+    </div>
+  </div>
+
+</body>
+
+  <script>
+    const box = document.querySelector(".box"),
+      qrInput = box.querySelector(".form input"),
+      generateBtn = box.querySelector(".form button"),
+      qrImg = box.querySelector(".qr-code img");
+    let preValue;
+
+    generateBtn.addEventListener("click", () => {
+      let qrValue = qrInput.value.trim();
+      if (!qrValue || preValue === qrValue) return;
+      preValue = qrValue;
+      generateBtn.innerText = "Generating QR Code...";
+      qrImg.src = `https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${qrValue}`;
+      qrImg.addEventListener("load", () => {
+        box.classList.add("active");
+        generateBtn.innerText = "Generate QR Code";
+      });
+    });
+
+    qrInput.addEventListener("keyup", () => {
+      if (!qrInput.value.trim()) {
+        box.classList.remove("active");
+        preValue = "";
+      }
+    });
+  </script>
+
+</html>

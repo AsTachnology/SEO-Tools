@@ -1,0 +1,396 @@
+<!DOCTYPE html>
+<!-- Created By AsTachnology - astachnology.com -->
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <title>Language Translate</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0 10px;
+      background: blueviolet;
+    }
+
+    .div {
+      max-width: 690px;
+      width: 100%;
+      padding: 30px;
+      background: #fff;
+      border-radius: 7px;
+      box-shadow: 0 10px 20px rgba(0, 0, 0, 0.01);
+    }
+
+    .bg {
+      border-radius: 5px;
+      border: 1px solid #ccc;
+    }
+
+    .bg .txt {
+      display: flex;
+      border-bottom: 1px solid #ccc;
+    }
+
+    .txt .to-text {
+      border-radius: 0px;
+      border-left: 1px solid #ccc;
+    }
+
+    .txt textarea {
+      height: 250px;
+      width: 100%;
+      border: none;
+      outline: none;
+      resize: none;
+      background: none;
+      font-size: 18px;
+      padding: 10px 15px;
+      border-radius: 5px;
+    }
+
+    .txt textarea::placeholder {
+      color: #b7b6b6;
+    }
+
+    .manage,
+    li,
+    .logo,
+    .logo i {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .manage {
+      list-style: none;
+      padding: 12px 15px;
+    }
+
+    .manage .row .logo {
+      width: 38%;
+    }
+
+    .manage .row .logo i {
+      width: 50px;
+      color: #adadad;
+      font-size: 14px;
+      cursor: pointer;
+      transition: transform 0.2s ease;
+      justify-content: center;
+    }
+
+    .manage .row.from .logo {
+      padding-right: 15px;
+      border-right: 1px solid #ccc;
+    }
+
+    .manage .row.to .logo {
+      padding-left: 15px;
+      border-left: 1px solid #ccc;
+    }
+
+    .manage .row select {
+      color: #333;
+      border: none;
+      outline: none;
+      font-size: 18px;
+      background: none;
+      padding-left: 5px;
+    }
+
+    .txt textarea::-webkit-scrollbar {
+      width: 4px;
+    }
+
+    .manage .row select::-webkit-scrollbar {
+      width: 8px;
+    }
+
+    .txt textarea::-webkit-scrollbar-track,
+    .manage .row select::-webkit-scrollbar-track {
+      background: #fff;
+    }
+
+    .txt textarea::-webkit-scrollbar-thumb {
+      background: #ddd;
+      border-radius: 8px;
+    }
+
+    .manage .row select::-webkit-scrollbar-thumb {
+      background: blueviolet;
+      border-radius: 8px;
+      border-right: 2px solid #ffffff;
+    }
+
+    .manage .exchange {
+      color: #adadad;
+      cursor: pointer;
+      font-size: 16px;
+      transition: transform 0.2s ease;
+    }
+
+    .manage i:active {
+      transform: scale(0.9);
+    }
+
+    .div button {
+      width: 100%;
+      padding: 14px;
+      outline: none;
+      border: none;
+      color: #fff;
+      cursor: pointer;
+      margin-top: 20px;
+      font-size: 17px;
+      border-radius: 5px;
+      background: blueviolet;
+    }
+
+    @media (max-width: 660px) {
+      .div {
+        padding: 20px;
+      }
+
+      .bg .txt {
+        flex-direction: column;
+      }
+
+      .txt .to-text {
+        border-left: 0px;
+        border-top: 1px solid #ccc;
+      }
+
+      .txt textarea {
+        height: 200px;
+      }
+
+      .manage .row .logo {
+        display: none;
+      }
+
+      .div button {
+        padding: 13px;
+        font-size: 16px;
+      }
+
+      .manage .row select {
+        font-size: 16px;
+      }
+
+      .manage .exchange {
+        font-size: 14px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="div">
+    <div class="bg">
+      <div class="txt">
+        <textarea spellcheck="false" class="from-text" placeholder="Enter text"></textarea>
+        <textarea spellcheck="false" readonly disabled class="to-text" placeholder="Translation"></textarea>
+      </div>
+      <ul class="manage">
+        <li class="row from">
+          <div class="logo">
+            <i id="from" class="fas fa-volume-up"></i>
+            <i id="from" class="fas fa-copy"></i>
+          </div>
+          <select></select>
+        </li>
+        <li class="exchange"><i class="fas fa-exchange-alt"></i></li>
+        <li class="row to">
+          <select></select>
+          <div class="logo">
+            <i id="to" class="fas fa-volume-up"></i>
+            <i id="to" class="fas fa-copy"></i>
+          </div>
+        </li>
+      </ul>
+    </div>
+    <button>Translate Text</button>
+  </div>
+</body>
+
+<script>
+  const countries = {
+    "am-ET": "Amharic",
+    "ar-SA": "Arabic",
+    "be-BY": "Bielarus",
+    "bem-ZM": "Bemba",
+    "bi-VU": "Bislama",
+    "bjs-BB": "Bajan",
+    "bn-IN": "Bengali",
+    "bo-CN": "Tibetan",
+    "br-FR": "Breton",
+    "bs-BA": "Bosnian",
+    "ca-ES": "Catalan",
+    "cop-EG": "Coptic",
+    "cs-CZ": "Czech",
+    "cy-GB": "Welsh",
+    "da-DK": "Danish",
+    "dz-BT": "Dzongkha",
+    "de-DE": "German",
+    "dv-MV": "Maldivian",
+    "el-GR": "Greek",
+    "en-GB": "English",
+    "es-ES": "Spanish",
+    "et-EE": "Estonian",
+    "eu-ES": "Basque",
+    "fa-IR": "Persian",
+    "fi-FI": "Finnish",
+    "fn-FNG": "Fanagalo",
+    "fo-FO": "Faroese",
+    "fr-FR": "French",
+    "gl-ES": "Galician",
+    "gu-IN": "Gujarati",
+    "ha-NE": "Hausa",
+    "he-IL": "Hebrew",
+    "hi-IN": "Hindi",
+    "hr-HR": "Croatian",
+    "hu-HU": "Hungarian",
+    "id-ID": "Indonesian",
+    "is-IS": "Icelandic",
+    "it-IT": "Italian",
+    "ja-JP": "Japanese",
+    "kk-KZ": "Kazakh",
+    "km-KM": "Khmer",
+    "kn-IN": "Kannada",
+    "ko-KR": "Korean",
+    "ku-TR": "Kurdish",
+    "ky-KG": "Kyrgyz",
+    "la-VA": "Latin",
+    "lo-LA": "Lao",
+    "lv-LV": "Latvian",
+    "men-SL": "Mende",
+    "mg-MG": "Malagasy",
+    "mi-NZ": "Maori",
+    "ms-MY": "Malay",
+    "mt-MT": "Maltese",
+    "my-MM": "Burmese",
+    "ne-NP": "Nepali",
+    "niu-NU": "Niuean",
+    "nl-NL": "Dutch",
+    "no-NO": "Norwegian",
+    "ny-MW": "Nyanja",
+    "ur-PK": "Pakistani",
+    "pau-PW": "Palauan",
+    "pa-IN": "Panjabi",
+    "ps-PK": "Pashto",
+    "pis-SB": "Pijin",
+    "pl-PL": "Polish",
+    "pt-PT": "Portuguese",
+    "rn-BI": "Kirundi",
+    "ro-RO": "Romanian",
+    "ru-RU": "Russian",
+    "sg-CF": "Sango",
+    "si-LK": "Sinhala",
+    "sk-SK": "Slovak",
+    "sm-WS": "Samoan",
+    "sn-ZW": "Shona",
+    "so-SO": "Somali",
+    "sq-AL": "Albanian",
+    "sr-RS": "Serbian",
+    "sv-SE": "Swedish",
+    "sw-SZ": "Swahili",
+    "ta-LK": "Tamil",
+    "te-IN": "Telugu",
+    "tet-TL": "Tetum",
+    "tg-TJ": "Tajik",
+    "th-TH": "Thai",
+    "ti-TI": "Tigrinya",
+    "tk-TM": "Turkmen",
+    "tl-PH": "Tagalog",
+    "tn-BW": "Tswana",
+    "to-TO": "Tongan",
+    "tr-TR": "Turkish",
+    "uk-UA": "Ukrainian",
+    "uz-UZ": "Uzbek",
+    "vi-VN": "Vietnamese",
+    "wo-SN": "Wolof",
+    "xh-ZA": "Xhosa",
+    "yi-YD": "Yiddish",
+    "zu-ZA": "Zulu"
+  }
+  const fromText = document.querySelector(".from-text"),
+    toText = document.querySelector(".to-text"),
+    exchageIcon = document.querySelector(".exchange"),
+    selectTag = document.querySelectorAll("select"),
+    logo = document.querySelectorAll(".row i");
+  translateBtn = document.querySelector("button"),
+
+    selectTag.forEach((tag, id) => {
+      for (let country_code in countries) {
+        let selected = id == 0 ? country_code == "en-GB" ? "selected" : "" : country_code == "hi-IN" ? "selected" : "";
+        let option = `<option ${selected} value="${country_code}">${countries[country_code]}</option>`;
+        tag.insertAdjacentHTML("beforeend", option);
+      }
+    });
+
+  exchageIcon.addEventListener("click", () => {
+    let tempText = fromText.value,
+      tempLang = selectTag[0].value;
+    fromText.value = toText.value;
+    toText.value = tempText;
+    selectTag[0].value = selectTag[1].value;
+    selectTag[1].value = tempLang;
+  });
+
+  fromText.addEventListener("keyup", () => {
+    if (!fromText.value) {
+      toText.value = "";
+    }
+  });
+
+  translateBtn.addEventListener("click", () => {
+    let text = fromText.value.trim(),
+      translateFrom = selectTag[0].value,
+      translateTo = selectTag[1].value;
+    if (!text) return;
+    toText.setAttribute("placeholder", "Translating...");
+    let apiUrl = `https://api.mymemory.translated.net/get?q=${text}&langpair=${translateFrom}|${translateTo}`;
+    fetch(apiUrl).then(res => res.json()).then(data => {
+      toText.value = data.responseData.translatedText;
+      data.matches.forEach(data => {
+        if (data.id === 0) {
+          toText.value = data.translation;
+        }
+      });
+      toText.setAttribute("placeholder", "Translation");
+    });
+  });
+
+  logo.forEach(icon => {
+    icon.addEventListener("click", ({ target }) => {
+      if (!fromText.value || !toText.value) return;
+      if (target.classList.contains("fa-copy")) {
+        if (target.id == "from") {
+          navigator.clipboard.writeText(fromText.value);
+        } else {
+          navigator.clipboard.writeText(toText.value);
+        }
+      } else {
+        let utterance;
+        if (target.id == "from") {
+          utterance = new SpeechSynthesisUtterance(fromText.value);
+          utterance.lang = selectTag[0].value;
+        } else {
+          utterance = new SpeechSynthesisUtterance(toText.value);
+          utterance.lang = selectTag[1].value;
+        }
+        speechSynthesis.speak(utterance);
+      }
+    });
+  });
+</script>
+
+</html>
